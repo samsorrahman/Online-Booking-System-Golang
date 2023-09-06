@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/config"
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/handlers"
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/render"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/config"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/handlers"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/render"
 
 	"github.com/alexedwards/scs/v2"
 )

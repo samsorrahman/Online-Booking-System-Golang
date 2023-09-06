@@ -6,9 +6,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/config"
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/models"
-	"github.com/samsorrahman/Online-Booking-System-Golang/pkg/render"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/config"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/models"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/render"
 )
 
 // Repo the repository used by the handlers
