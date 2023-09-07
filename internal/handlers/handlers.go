@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/config"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/forms"
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/models"
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/render"
 )
@@ -33,8 +34,6 @@ func NewHandlers(r *Repository) {
 
 // Home is the handler for the home page
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-
-	// storing the remote IP address of the client
 	remoteIP := r.RemoteAddr
 	m.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
@@ -47,9 +46,9 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["test"] = "Hello, again"
 
-	// fetch remote IP from session
 	remoteIP := m.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
+
 	// send data to the template
 	render.RenderTemplate(w, r, "about.page.tmpl", &models.TemplateData{
 		StringMap: stringMap,
@@ -58,11 +57,39 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
 // Reservation renders the make a reservation page and displays form
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+	render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 }
 
+// PostReservation handles the posting of a reservation form
 func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	form.Has("first_name", r)
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		render.RenderTemplate(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
 }
 
 // Generals renders the room page
@@ -104,8 +131,6 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println(err)
 	}
-
-	log.Println(string(out))
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(out)
