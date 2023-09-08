@@ -67,7 +67,7 @@ func getRoutes() http.Handler {
 	mux.Use(middleware.Recoverer)
 
 	// Middleware: NoSurf - adds CSRF protection to routes
-	mux.Use(NoSurf)
+	// mux.Use(NoSurf)
 
 	// Middleware: SessionLoad - loads and saves session data for the current request
 	mux.Use(SessionLoad)
