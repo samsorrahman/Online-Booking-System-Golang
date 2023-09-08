@@ -1,16 +1,17 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/alexedwards/scs/v2"
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/config"
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/handlers"
+	"github.com/samsorrahman/Online-Booking-System-Golang/internal/models"
 	"github.com/samsorrahman/Online-Booking-System-Golang/internal/render"
-
-	"github.com/alexedwards/scs/v2"
 )
 
 const portNumber = ":8081"
@@ -20,6 +21,9 @@ var session *scs.SessionManager
 
 // main is the main function
 func main() {
+	// what am I going to put in the session
+	gob.Register(models.Reservation{})
+
 	// change this to true when in production
 	app.InProduction = false
 
